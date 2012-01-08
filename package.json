@@ -1,0 +1,18 @@
+{
+  "author": "Corpix <me@corpix.ru> (http://corpix.ru)",
+  "name": "smsPilot",
+  "description": "Send sms via smspilot.ru",
+  "version": "0.0.1",
+  "repository": {
+    "url": ""
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.4.0"
+  },
+  "dependencies": {
+    "restler": "*",
+    "fructose": "*"
+  },
+  "devDependencies": {}
+}
