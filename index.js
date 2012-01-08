@@ -6,8 +6,6 @@ var https = require('http')
 
   , fructose = require('fructose');
 
-
-
 //
 //
 //
@@ -18,16 +16,17 @@ var smsPilot = function (opts){
 
   var url = 'https://smspilot.ru/api.php';
 
-  //
-  //
-  //
-
   var self = this
     , responseParser = function(data, callback){
     if(data.match(/^(ERROR=.+)/)){
       this.statusCode = 500;
       data = new Error(data);
-    } else if(data.match(/^SUCCESS/)) {
+      return callback(data);
+    }
+    if(opts.parsing === false)
+      return callback(data);
+
+    if(data.match(/^SUCCESS/)) {
 
       if(data.match(/SMS\sSENT (\d+)\/(\d+)\n/)){ // sms
         var price = parseInt(RegExp.$1)
@@ -140,33 +139,4 @@ var smsPilot = function (opts){
 }
 
 
-//
-//
-//
-
-
-var pilot = new smsPilot();
-pilot
-  .set('apikey', 'XXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZXXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZ')
-  .set('from', 'test');
-pilot.balance().on('success', function(data){
-  console.log(data)
-})
-
-pilot.status([ 10000, 10001 ]).on('success', function(data){
-  console.log(data)
-})
-
-pilot.sms({
-  to: '79165193353,79165555555',
-  send: 'test test'
-}).on('success', function(data){
-  data.messages[0].getStatus().on('success', function(data){
-    console.log('from messages array', data)
-  })
-  console.log('>>', data)
-}).on('error', function(){
-  console.log('error', arguments)
-});
-
-//module.exports = sms;
+module.exports = smsPilot;
